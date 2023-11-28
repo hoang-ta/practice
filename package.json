@@ -3,7 +3,7 @@
     "typescript": "^5.3.2"
   },
   "scripts": {
-    "compile": "tsc --outdir ./dist",
-    "echo": "echo $npm_config_test && echo $npm_config_test"
+    "compile": "tsc -w --outdir ./dist $file.ts",
+    "dev": "node --watch ./dist/$file.js"
   }
 }
