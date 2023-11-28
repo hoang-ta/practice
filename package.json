@@ -4,6 +4,6 @@
   },
   "scripts": {
     "compile": "tsc -w --outdir ./dist $file.ts",
-    "dev": "node --watch ./dist/$file.js"
+    "dev": "npm run compile $file & node --watch ./dist/$file.js"
   }
 }
