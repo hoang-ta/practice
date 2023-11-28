@@ -1,24 +1,24 @@
-type Node<T> = {
-  next: Node<T> | undefined;
-  prev: Node<T> | undefined;
+class Node<T> {
   item: T | undefined;
-};
+  next: Node<T> | null;
+  prev: Node<T> | null;
 
-type LinkedList<T> = {
-  head: Node<T> | undefined;
-  tail: Node<T> | undefined;
-};
+  constructor(item?: T | undefined) {
+    this.item = item;
+    this.next = null;
+    this.prev = null;
+  }
+}
 
 export default class Queue<T> {
-  list: LinkedList<T>;
-  count: number;
+  tail: Node<T>;
+  head: Node<T>;
+  _length: number;
 
   constructor() {
-    this.list = {
-      head: undefined,
-      tail: undefined,
-    };
-    this.count = 0;
+    this.head = new Node();
+    this.tail = new Node();
+    this._length = 0;
   }
 
   /**
@@ -27,21 +27,14 @@ export default class Queue<T> {
    * @return {number} The new length of the queue.
    */
   enqueue(item: T): number {
-    const node: Node<T> = {
-      item,
-      next: undefined,
-      prev: undefined,
-    };
-    const current = this.list.tail;
-    if (current) {
-      current.next = node;
-    }
-    this.list.tail = node;
-    this.list.tail.prev = current;
-    if (this.list.head === undefined) {
-      this.list.head = this.list.tail;
-    }
-    this.count += 1;
+    const newLastNode = new Node(item);
+    const oldLastNode = this.tail.next;
+    // this.head.prev = newLastNode;
+    oldLastNode!.prev = newLastNode;
+    newLastNode.next = oldLastNode;
+    newLastNode.prev = this.tail;
+    this.tail.next = newLastNode;
+    this._length++;
     return this.length();
   }
 
@@ -53,11 +46,13 @@ export default class Queue<T> {
     if (this.isEmpty()) {
       return undefined;
     }
-    const node = this.list.head;
-    this.list.head = this.list.head?.next;
-    this.list.head!.prev = undefined;
-    this.count -= 1;
-    return node?.item;
+    const removedNode = this.head.prev;
+    const newFirstNode = removedNode!.prev;
+    removedNode!.prev = null;
+    removedNode!.next = null;
+    this.head.prev = newFirstNode;
+    this._length--;
+    return removedNode?.item;
   }
 
   /**
@@ -76,7 +71,7 @@ export default class Queue<T> {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.list.head?.item;
+    return this.head.prev?.item;
   }
 
   /**
@@ -87,7 +82,7 @@ export default class Queue<T> {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.list.tail?.item;
+    return this.tail.next?.item;
   }
 
   /**
@@ -95,6 +90,6 @@ export default class Queue<T> {
    * @return {number} The number of items in the queue.
    */
   length(): number {
-    return this.count;
+    return this._length;
   }
 }
