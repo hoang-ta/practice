@@ -1,4 +1,5 @@
-function removeDuplicates(nums: number[]) {
+// https://leetcode.com/problems/remove-duplicates-from-sorted-array/
+function removeDuplicates(nums: number[]): number {
   let leftIndex = 0;
   let rightIndex = 1;
   while (rightIndex <= nums.length) {
@@ -8,10 +9,10 @@ function removeDuplicates(nums: number[]) {
     }
     rightIndex++;
   }
-  nums = nums.slice(0, leftIndex);
+  // nums = nums.slice(0, leftIndex);
   //   nums = nums.filter((value) => value !== undefined);
-  console.log('nums: ', nums);
-  return leftIndex + 1;
+  // console.log('nums: ', nums);
+  return leftIndex;
 }
 
 console.log(removeDuplicates([1, 1, 2]));
